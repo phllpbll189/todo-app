@@ -1,7 +1,6 @@
 const express = require('express');
-const jwt = require('jsonwebtoken');
-const { request } = require('http');
-const https = require('https');
+const path = require('path');
+const {appendCookie} = require('./middleware');
 
 const app = express();
 const PORT = 8000;
@@ -15,20 +14,6 @@ app.listen(PORT, (err) => {
     console.log("App is running now");
 })
 
-app.use(AppendCookie)
-
-app.get('/', (req, res) => {
-    console.log(req);
-    res.send("helloworld");
-})
-
-function AppendCookie(req, res, next) {
-    const token = jwt.sign({email: "Phllpbll@fuck.com"}, 'insertabetterkeyhere');
-    res.cookie("access_token", token, {
-        httpOnly: true,
-        secure: "production",
-    }).status(200)
-    .json({message: "logged in successfully"})
-
-    next();
-}
+let htmlPath  = path.resolve(__dirname+'/../front_end/build')
+app.use(appendCookie);
+app.use(express.static(htmlPath));
