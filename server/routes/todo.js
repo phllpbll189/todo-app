@@ -5,7 +5,9 @@ const router = express.Router();
 
 //write route definitions here
 //MUST USE THE TODO CONTROLLER FOR THIS THOUGH
-
+router.get('/', (req, res) => {
+    res.send("hello from api/todo!")
+})
 //https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes
 //scroll to controller section
 
