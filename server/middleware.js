@@ -1,16 +1,35 @@
 const jwt = require('jsonwebtoken');
 
-function AppendCookie(req, res, next) {
-                                                        //use an environment variable here
-    const token = jwt.sign({email: "Phllpbll@fuck.com"}, 'insertabetterkeyhere');
-    res.cookie("access_token", token, {
+//todo make seperate generate jwt code.
+
+//need to only append after sql insert has ran
+function AppendJWT(req, res, next) {
+    let secureSettings = {
         httpOnly: true,
-        secure: "production",
-    }).status(200)
+        sameSite: true,
+    };
+    let tokenSplit = req.VARS.token.split(".");
+
+    res.cookie("header", tokenSplit[0], secureSettings)
+    res.cookie("token", tokenSplit[2], secureSettings)
+    res.cookie("payload", tokenSplit[1], {
+        ...secureSettings,
+        httpOnly: false
+    })
 
     next();
 }
 
-module.exports = {
-        appendCookie: AppendCookie
+function CreateJWT(req, res, next) {
+    const token = jwt.sign({email: req.body.email}, process.env.PRIVATEKEY);
+    req.VARS = {
+        ...req.VARS,
+        token
     }
+    next();
+}
+
+module.exports = {
+    AppendJWT,
+    CreateJWT
+}

@@ -4,26 +4,15 @@ const router = express.Router();
 const mysql = require('mysql');
 const {authenticateUser} = require('../middleware');
 const {TodoRouter} = require('./todo');
-
-const connection = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB
-})
+const {AccountRouter} = require('../Routes/account');
 
 //router.use(authenticateUser);
-router.use((req, res, next) => {
-    req.VARS = {
-        ...req.VARS,
-        connection: connection
-    };
-    next();
-});
 router.all('/todo', TodoRouter);
+router.use('/account', AccountRouter);
+//router.all('/list', ListRouter);
+//router.all('/todo', TodoROuter);
 
 
-//export the router and use it in index so that we can seperate routes into different files
 module.exports = {
     apiRouter: router
 }
