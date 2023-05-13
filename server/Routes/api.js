@@ -7,7 +7,7 @@ const {TodoRouter} = require('./todo');
 const {AccountRouter} = require('../Routes/account');
 
 //router.use(authenticateUser);
-router.all('/todo', TodoRouter);
+router.use('/todo', TodoRouter);
 router.use('/account', AccountRouter);
 //router.all('/list', ListRouter);
 //router.all('/todo', TodoROuter);

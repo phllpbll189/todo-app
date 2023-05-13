@@ -1,8 +1,8 @@
 module.exports = {
     verifyUser: (token) => {
-        return `SELECT Email, Pass 
+        return `SELECT Email
                     FROM Users 
-                    WHERE Token = ${token}` 
+                    WHERE Token = "${token}"` 
     },
 
     signUp: (email, password, token) => {

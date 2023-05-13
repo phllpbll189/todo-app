@@ -1,4 +1,5 @@
 const express = require('express');
+const { VerifyUser } = require('../Controllers/UserController');
 const TodoRouter = express.Router();
 
 //AUTH MUST BE FINISHED FIRST  
@@ -10,12 +11,10 @@ const TodoRouter = express.Router();
 //or all todo's if an ID isn't present
 //or post todos
 //etc
-
-TodoRouter.get('/', (req, res) => {
+TodoRouter.use(VerifyUser);
+TodoRouter.get('/:lid/:id', (req, res) => {
     res.send("hello from api/todo!")
-})
-
-//todo
+});
 
 module.exports = {
     TodoRouter

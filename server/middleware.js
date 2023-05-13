@@ -1,8 +1,8 @@
 const jwt = require('jsonwebtoken');
+const mysql = require('mysql');
+const {verifyUser} = require('./SQL/users');
+const { parseToken } = require('./util');
 
-//todo make seperate generate jwt code.
-
-//need to only append after sql insert has ran
 function AppendJWT(req, res, next) {
     let secureSettings = {
         httpOnly: true,
@@ -29,7 +29,33 @@ function CreateJWT(req, res, next) {
     next();
 }
 
+function ConnectDB(req, res, next) {
+    let connection
+
+    try {
+        connection = mysql.createConnection({
+            host: process.env.DB_HOST,
+            user: process.env.DB_USER,
+            password: process.env.DB_PASSWORD,
+            database: process.env.DB
+        });
+
+    } catch (error) {
+        res.status(501).redirect("/temp"); //make error handling function?
+        next(error);
+    };
+
+    req.VARS = {
+        ...req.VARS,
+        "connection": connection
+    };
+    
+    next();
+}
+
+   
 module.exports = {
     AppendJWT,
-    CreateJWT
+    CreateJWT,
+    ConnectDB
 }

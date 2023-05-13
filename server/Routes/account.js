@@ -12,6 +12,7 @@ const { AppendJWT, CreateJWT } = require('../middleware');
 AccountRouter.post('/signup', CreateJWT, SignUp, AppendJWT, (req, res) => {
     res.status(201).send("Profile Created")
 });
+
 AccountRouter.post('/signin', CheckCreds, CreateJWT, UpdateJWT, AppendJWT, (req, res) => {
     res.status(200).send("Authorized");
 })

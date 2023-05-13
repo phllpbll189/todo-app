@@ -9,7 +9,7 @@ function VerifyUser(req, res, next) {
     }
 
 
-    req.VAR.connection.query(sqlCode.verifyUser(parseToken(...cookies)), (err, result) => {
+    req.VARS.connection.query(sqlCode.verifyUser(parseToken(cookies.header, cookies.payload, cookies.token)), (err, result) => {
         if(err){
             res.status(500).send("Internal Connection Error");
         }
@@ -18,7 +18,6 @@ function VerifyUser(req, res, next) {
             res.status(401).send("Bad Token");
         }
 
-        console.log(result);
         next();
     });
 }
@@ -30,9 +29,7 @@ function SignUp(req, res, next) {
                 res.status(500).send("Internal Connection Error");
             }
 
-
-            if(err.errno == 1062) res.status(409);
-            res.send("Email already used")
+            if(err.errno == 1062) res.status(409).send("Email already used");
         });
 }
 
@@ -42,8 +39,8 @@ function CheckCreds(req, res, next){
             res.status(500).send("Internal Connection Error");
         }
 
-        if(!result[0]){
-            res.status(401).send();
+        if(!result[0]){ 
+            res.status(401).send("Invalid Username and Password");
         }
 
         next();
@@ -53,11 +50,11 @@ function CheckCreds(req, res, next){
 function UpdateJWT(req, res, next) {
 
     req.VARS.connection.query(sqlCode.updateJWT(req.VARS.token, req.body.email, req.body.password), (err, result) => {
-        if(!err){
-            next();
-        } else {
+        if(err){
+            res.status(502).send("couldn't insert into database")
             console.log(err)
         }
+        next();
     });
 }
 
