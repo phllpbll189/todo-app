@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql');
-const {verifyUser} = require('./SQL/users');
+const {verifyUser} = require('./SQL/UserSQL');
 const { parseToken } = require('./util');
 
 function AppendJWT(req, res, next) {

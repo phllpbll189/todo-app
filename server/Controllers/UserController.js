@@ -1,5 +1,5 @@
 const {parseToken} = require('../util')
-const sqlCode = require('../SQL/users')
+const sqlCode = require('../SQL/UserSQL')
 
 function VerifyUser(req, res, next) {
     var cookies = {

@@ -12,7 +12,7 @@ const TodoRouter = express.Router();
 //or post todos
 //etc
 TodoRouter.use(VerifyUser);
-TodoRouter.get('/:lid/:id', (req, res) => {
+TodoRouter.get('/:id', (req, res) => {
     res.send("hello from api/todo!")
 });
 

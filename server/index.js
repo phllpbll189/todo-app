@@ -4,6 +4,7 @@ const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
 const {ConnectDB} = require('./middleware');
 const { apiRouter } = require('./Routes/api');
+const { AccountRouter } = require('./Routes/account');
 
 const app = express();
 let port;
@@ -26,7 +27,7 @@ app.use(ConnectDB);
 let htmlPath  = path.resolve(__dirname+'/../front_end/build')
 app.use('/',  express.static(htmlPath));
 
-app.use('/api', apiRouter);
+app.use('/account', AccountRouter);
 app.get('*', (req, res) => {
     res.redirect('/');
 })
