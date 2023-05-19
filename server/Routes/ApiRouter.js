@@ -3,14 +3,13 @@ const express = require('express');
 const router = express.Router();
 const mysql = require('mysql');
 const {authenticateUser} = require('../middleware');
-const {TodoRouter} = require('./todo');
-const {AccountRouter} = require('../Routes/account');
+const {TodoRouter} = require('./TodoRouter');
+const {AccountRouter} = require('./AccountRouter');
 
 //router.use(authenticateUser);
-router.use('/todo', TodoRouter);
 router.use('/account', AccountRouter);
 //router.all('/list', ListRouter);
-//router.all('/todo', TodoROuter);
+//router.use('/todo', TodoRouter);
 
 
 module.exports = {

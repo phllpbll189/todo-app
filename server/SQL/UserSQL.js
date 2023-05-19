@@ -1,3 +1,5 @@
+const { IsOwner } = require("../Controllers/UserController")
+
 module.exports = {
     verifyUser: (token) => {
         return `SELECT Email
@@ -22,5 +24,13 @@ module.exports = {
                 FROM Users
                 WHERE Email="${email}"
                 AND Pass="${password}"`
+    },
+
+    IsOwner: (Email, Token, ListID) => { //testing required
+        return `SELECT \`Owner\`
+                FROM Invite_List
+                INNER JOIN Users ON Users_Email = Email
+                AND \`L_ListID\` = "${ListID}"
+                AND Token = "${Token}"`
     }
 }

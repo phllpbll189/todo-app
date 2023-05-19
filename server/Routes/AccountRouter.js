@@ -1,13 +1,8 @@
-/*Handle accounts here,
-Signin
-Signup
-Invite other users*/
-
 const express = require('express');
 const AccountRouter = express.Router();
 const {CheckCreds, UpdateJWT, SignUp} = require('../Controllers/UserController');
 const { AppendJWT, CreateJWT } = require('../middleware');
-const { ListRouter } = require('./list');
+const { ListRouter } = require('./ListRouter');
 
 //todo
 AccountRouter.post('/signup', CreateJWT, SignUp, AppendJWT, (req, res) => {
@@ -18,7 +13,7 @@ AccountRouter.post('/login', CheckCreds, CreateJWT, UpdateJWT, AppendJWT, (req, 
     res.status(200).send("Authorized");
 })
 
-AccountRouter.use('/list', ListRouter);
+AccountRouter.use('/lists', ListRouter);
 
 module.exports = {
     AccountRouter

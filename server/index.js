@@ -3,8 +3,8 @@ const path = require('path');
 const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
 const {ConnectDB} = require('./middleware');
-const { apiRouter } = require('./Routes/api');
-const { AccountRouter } = require('./Routes/account');
+const { apiRouter } = require('./Routes/ApiRouter');
+const { AccountRouter } = require('./Routes/AccountRouter');
 
 const app = express();
 let port;
@@ -27,7 +27,7 @@ app.use(ConnectDB);
 let htmlPath  = path.resolve(__dirname+'/../front_end/build')
 app.use('/',  express.static(htmlPath));
 
-app.use('/account', AccountRouter);
+app.use('/accounts', AccountRouter);
 app.get('*', (req, res) => {
     res.redirect('/');
 })
