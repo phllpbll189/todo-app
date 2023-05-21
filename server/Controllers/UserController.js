@@ -61,7 +61,11 @@ function UpdateJWT(req, res, next) {
 }
 
 function VerifyOwner(req, res, next) {
-    req.VARS.connection.query("sql Here", (err, result) => {
+    req.VARS.connection.query(sqlCode.IsOwner(
+        req.cookies.payload.email, 
+        parseToken(req.cookies.header, req.cookies.payload, req.cookies.token),
+        req.params.list
+    ), (err, result) => {
         if(err){
             res.status(500).send("Internal Error");
         }
@@ -73,7 +77,12 @@ function VerifyOwner(req, res, next) {
 }
 
 function VerifyAccess(req, res, next) {
-    req.VARS.connection.query("sql Here", (err, result) => {
+    req.VARS.connection.query(sqlCode.HasAccess(
+            req.cookies.payload.email, 
+            parseToken(req.cookies.header, req.cookies.payload, req.cookies.token),
+            req.params.list
+        ), (err, result) => {
+
         if(err){
             res.status(500).send("Internal Error");
         }

@@ -27,10 +27,26 @@ module.exports = {
     },
 
     IsOwner: (Email, Token, ListID) => { //testing required
-        return `SELECT \`Owner\`
-                FROM Invite_List
-                INNER JOIN Users ON Users_Email = Email
-                AND \`L_ListID\` = "${ListID}"
-                AND Token = "${Token}"`
+        return `SELECT Owner
+        FROM Invite_List
+        INNER JOIN Users ON Users_Email = ${Email} 
+        AND Token = "${Token}"
+        AND Invite_List.L_ListID = ${ListID}`
+    },
+
+    HasAccess: (Email, Token, ListID) => {
+        return `SELECT Users_Email, invite_accepted
+        FROM Invite_List
+        INNER JOIN Users ON Users_Email = ${Email} 
+        AND Token = "${Token}"
+        AND Invite_List.L_ListID = ${ListID}` 
+    },
+
+    HasWriteAccess: (Email, Token, ListID) => {
+        return `SELECT Write_Privilege 
+        FROM Invite_List
+        INNER JOIN Users ON Users_Email = ${Email} 
+        AND Token = "${Token}"
+        AND Invite_List.L_ListID = ${ListID}`
     }
 }

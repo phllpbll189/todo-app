@@ -3,7 +3,7 @@ const {VerifyUser, VerifyAccess, VerifyOwner} = require('../Controllers/UserCont
 const { TodoRouter } = require('./TodoRouter');
 const ListRouter = express.Router();
 
-ListRouter.get('/', VerifyUser);
+ListRouter.get('/', VerifyAccess);
 ListRouter.post('/:list', VerifyUser);//add new list to the email provided in the cookie
 ListRouter.delete('/:list', VerifyOwner );
 ListRouter.put('/:list', VerifyOwner);
