@@ -2,7 +2,7 @@ USE TodoSchema;
 
 -- standard inserts
 INSERT INTO `Users`(`Email`,`Pass`,`Token`)
-VALUES("TEST2@EMAIL","0123456789","TOKEN");
+VALUES("TEST@EMAIL","0123456789","TOKEN");
 
 insert into `Lists`(`name`)
 values("TEST LIST");

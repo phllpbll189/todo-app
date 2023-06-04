@@ -6,8 +6,8 @@ module.exports = {
         and Token = "TOKEN"`
     },
     
-    createList: () => {
-        return ""
+    createList: (token, list) => {
+        return `CALL InsertList(${token}, ${list});`
     },
 
     deleteList: () => {
