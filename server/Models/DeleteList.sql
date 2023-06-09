@@ -1,4 +1,5 @@
 USE TodoSchema;
+DROP PROCEDURE IF EXISTS DeleteList;
 DELIMITER //
 
 CREATE PROCEDURE DeleteList(IN token varchar(255), IN LID varchar(255))
@@ -12,15 +13,18 @@ BEGIN
     BEGIN
 		DELETE FROM Invite_List
         WHERE L_ListID = (
-			SELECT L_ListID
-            FROM Invite_List
-            WHERE L_ListID = LID
-            AND `Owner` = true
-            AND Users_Email = (
-				SELECT Email 
-                FROM Users
-                WHERE Token = token
-			)
+			select L_ListID
+            from (
+				SELECT L_ListID
+				FROM Invite_List
+				WHERE Users_Email = (
+					SELECT Email 
+					FROM Users
+					WHERE Token = token
+			
+				AND `Owner` = true
+				AND L_ListID = LID
+			)) table_name_here
         );
         
         DELETE FROM Lists
