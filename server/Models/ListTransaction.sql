@@ -1,6 +1,8 @@
 USE TodoSchema;
-DELIMITER //
 
+drop procedure if exists InsertList;
+
+DELIMITER //
 CREATE PROCEDURE InsertList(IN token VARCHAR(255), IN N VARCHAR(255))
 BEGIN
   
@@ -19,7 +21,7 @@ BEGIN
 		insert into Invite_List(`Users_Email`, `L_ListID`, `Write_Privilege`, `Owner`)
 		select Email, LAST_INSERT_ID(), true, true
         from Users
-        where Token = @token;
+        where Token = token;
 
 		commit;
 	end;
@@ -27,5 +29,4 @@ BEGIN
 END//
 
 delimiter ;
-show errors;
 -- drop procedure InsertList;
