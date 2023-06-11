@@ -3,7 +3,7 @@ USE TodoSchema;
 drop procedure if exists InsertList;
 
 DELIMITER //
-CREATE PROCEDURE InsertList(IN token VARCHAR(255), IN N VARCHAR(255))
+CREATE PROCEDURE InsertList(IN TOK VARCHAR(255), IN N VARCHAR(255))
 BEGIN
   
 	declare exit handler for sqlexception
@@ -21,7 +21,7 @@ BEGIN
 		insert into Invite_List(`Users_Email`, `L_ListID`, `Write_Privilege`, `Owner`)
 		select Email, LAST_INSERT_ID(), true, true
         from Users
-        where Token = token;
+        where Token = TOK;
 
 		commit;
 	end;

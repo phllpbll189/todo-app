@@ -6,20 +6,20 @@ module.exports = {
         and Token = "TOKEN"`
     },
     
-    createList: (token, list) => {
-        return `CALL InsertList(${token}, ${list});`
+    createList: (token, list) => { // need to run the InsertList Stored before this works.
+        return `CALL InsertList(${token}, ${list})`;
     },
 
-    deleteList: () => {
-        return ""
+    deleteList: (token, listID) => {
+        return `call DeleteList(${token}, ${listID}`;
     },
     
     updateList: () => {
         return ""
     },
 
-    removeUserPermissions: () => {
-        return ""
+    removeUserPermissions: (ownerToken, targetEmail, listID) => {
+        return `call deletePermissions(${ownerToken}, ${targetEmail}, ${listID})`;
     },
 
     addUserPermissions: () => {
@@ -39,8 +39,8 @@ module.exports = {
             AND \`L_ListID\` = ${listID})`
     },
 
-    changePermissions: () => {
-        return ""
+    changePermissions: (token, email, lid, access) => {
+        return `call changePermissions(${token}, ${email}, ${lid}, ${access})`;
     },
 
     getPermissions: () => {

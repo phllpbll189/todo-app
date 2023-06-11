@@ -2,7 +2,7 @@ USE TodoSchema;
 DROP PROCEDURE IF EXISTS DeleteList;
 DELIMITER //
 
-CREATE PROCEDURE DeleteList(IN token varchar(255), IN LID varchar(255))
+CREATE PROCEDURE DeleteList(IN TOK varchar(255), IN LID varchar(255))
 BEGIN
 	DECLARE EXIT HANDLER FOR sqlexception
     BEGIN
@@ -20,11 +20,11 @@ BEGIN
 				WHERE Users_Email = (
 					SELECT Email 
 					FROM Users
-					WHERE Token = token
-			
+					WHERE Token = TOK
+					)
 				AND `Owner` = true
 				AND L_ListID = LID
-			)) table_name_here
+            ) table_name_here
         );
         
         DELETE FROM Lists

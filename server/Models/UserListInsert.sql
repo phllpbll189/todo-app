@@ -2,7 +2,7 @@ USE TodoSchema;
 
 -- standard inserts
 INSERT INTO `Users`(`Email`,`Pass`,`Token`)
-VALUES("TEST@EMAIL","0123456789","TOKEN");
+VALUES("TEST2@EMAIL","0123456789","TOKEN2");
 
 insert into `Lists`(`name`)
 values("TEST LIST");
@@ -39,7 +39,10 @@ AND Token = "BADTOKEN";
 DELETE `Users`, `Invite_List`, `Lists`
 FROM `Invite_List`
 INNER JOIN `Users` ON `Users`.`Email` = `Invite_List`.`Users_Email`
-INNER JOIN `Lists` ON `Lists`.`ListID` = `Invite_List`.`L_ListID`
+INNER JOIN `Lists` ON `Lists`.`ListID` = `Invite_List`.`L_ListID`;
 
+DELETE FROM Lists
+where ListID = 8
+or ListID = 9
 
 

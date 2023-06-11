@@ -1,8 +1,8 @@
 use TodoSchema;
 
-select token, Email, ListID, `name`
+select token, Email, ListID, `name`, Write_Privilege, `Owner`
 from Invite_List
-join Lists
+inner join Lists
 on ListID = L_ListID
 join Users
 on Users_Email = Email;
