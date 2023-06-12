@@ -1,17 +1,21 @@
 module.exports = {
-    getLists: () => {
-        return `SELECT Write_Privilege, "Owner"
-        FROM Invite_List
-        INNER JOIN Users on Email = "TEST@EMAIL"
-        and Token = "TOKEN"`
+    getLists: (token) => {
+        return `
+        select * 
+        from ListView
+        where Users_Email = (
+            select Email
+            from Users
+            where Token = "${token}"
+        )`
     },
     
-    createList: (token, list) => { // need to run the InsertList Stored before this works.
-        return `CALL InsertList(${token}, ${list})`;
+    createList: (token, list) => {
+        return `CALL InsertList("${token}", "${list}")`;
     },
 
     deleteList: (token, listID) => {
-        return `call DeleteList(${token}, ${listID}`;
+        return `CALL DeleteList("${token}", "${listID}")`;
     },
     
     updateList: () => {

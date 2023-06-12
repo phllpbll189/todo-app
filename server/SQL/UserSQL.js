@@ -1,5 +1,3 @@
-const { IsOwner } = require("../Controllers/UserController")
-
 module.exports = {
     verifyUser: (token) => {
         return `SELECT Email
@@ -19,7 +17,7 @@ module.exports = {
                 AND Pass = "${password}"`
     },
     
-    CheckCred: (email, password) => {
+    Check: (email, password) => {
         return `SELECT Email
                 FROM Users
                 WHERE Email="${email}"
