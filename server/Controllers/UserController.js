@@ -1,5 +1,5 @@
-const {parseToken} = require('../util')
-const sqlCode = require('../SQL/UserSQL')
+const {parseToken} = require('../util');
+const sqlCode = require('../SQL/UserSQL');
    
 function VerifyUser(req, res, next) {
 
@@ -36,7 +36,7 @@ function SignUp(req, res, next) {
 
 function CheckCreds(req, res, next){
 
-    req.VARS.connection.query(sqlCode.CheckCred(req.body.email, req.body.password), (err, result) => {
+    req.VARS.connection.query(sqlCode.Check(req.body.email, req.body.password), (err, result) => {
         if(err){
             res.status(500).send("Internal Error");
         }
