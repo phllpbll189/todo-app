@@ -11,21 +11,22 @@ BEGIN
     
     START TRANSACTION;
     BEGIN
-		DELETE FROM Invite_List
-        WHERE L_ListID = (
-			select L_ListID
-            from (
-				SELECT L_ListID
-				FROM Invite_List
-				WHERE Users_Email = (
-					SELECT Email 
-					FROM Users
-					WHERE Token = TOK
-					)
-				AND `Owner` = true
-				AND L_ListID = LID
-            ) table_name_here
+		set @count = (
+			SELECT L_ListID
+			FROM Invite_List
+			WHERE Users_Email = (
+				SELECT Email 
+				FROM Users
+				WHERE Token = TOK
+				)
+			AND `Owner` = true
+			AND L_ListID = LID
         );
+
+    
+		DELETE FROM Invite_List
+        WHERE L_ListID = LID
+        and @count > 0;
         
         DELETE FROM Lists
         WHERE ListID = LID;

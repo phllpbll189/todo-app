@@ -1,5 +1,6 @@
 const {parseToken} = require('../util');
 const sqlCode = require('../SQL/UserSQL');
+const { db } = require('../DB');
    
 function VerifyUser(req, res, next) {
 
@@ -10,7 +11,7 @@ function VerifyUser(req, res, next) {
     }
 
 
-    req.VARS.connection.query(sqlCode.verifyUser(parseToken(cookies.header, cookies.payload, cookies.token)), (err, result) => {
+    db.getInstance().query(sqlCode.verifyUser(parseToken(cookies.header, cookies.payload, cookies.token)), (err, result) => {
         if(err){
             res.status(500).send("Internal Error");
         }
@@ -25,7 +26,7 @@ function VerifyUser(req, res, next) {
 
 function SignUp(req, res, next) {
     
-    req.VARS.connection.query(sqlCode.signUp(req.body.email, req.body.password, req.VARS.token), (err, result) => {
+    db.query(sqlCode.signUp(req.body.email, req.body.password, req.VARS.token), (err, result) => {
         if(err){
             res.status(500).send("Internal Error");
         }
@@ -35,8 +36,8 @@ function SignUp(req, res, next) {
 }
 
 function CheckCreds(req, res, next){
-
-    req.VARS.connection.query(sqlCode.Check(req.body.email, req.body.password), (err, result) => {
+    
+    db.query(sqlCode.Check(req.body.email, req.body.password), (err, result) => {
         if(err){
             res.status(500).send("Internal Error");
         }
@@ -51,7 +52,7 @@ function CheckCreds(req, res, next){
 
 function UpdateJWT(req, res, next) {
 
-    req.VARS.connection.query(sqlCode.updateJWT(req.VARS.token, req.body.email, req.body.password), (err, result) => {
+    db.query(sqlCode.updateJWT(req.VARS.token, req.body.email, req.body.password), (err, result) => {
         if(err){
             res.status(502).send("Internal Error");
             console.log(err);
@@ -61,7 +62,7 @@ function UpdateJWT(req, res, next) {
 }
 
 function VerifyOwner(req, res, next) {
-    req.VARS.connection.query(sqlCode.IsOwner(
+    db.query(sqlCode.IsOwner(
         req.cookies.payload.email, 
         parseToken(req.cookies.header, req.cookies.payload, req.cookies.token),
         req.params.list
@@ -77,7 +78,7 @@ function VerifyOwner(req, res, next) {
 }
 
 function VerifyAccess(req, res, next) {
-    req.VARS.connection.query(sqlCode.HasAccess(
+    db.query(sqlCode.HasAccess(
             req.cookies.payload.email, 
             parseToken(req.cookies.header, req.cookies.payload, req.cookies.token),
             req.params.list

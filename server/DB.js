@@ -1,5 +1,10 @@
 const mysql = require('mysql');
 
+require('dotenv').config();
+if(process.env.NODE_ENV !== 'production'){
+    port = process.env.PORT || 8080;
+}
+
 var DBFactory = (function(){
     class singletonDB {
         pool
@@ -11,7 +16,7 @@ var DBFactory = (function(){
                 user    : process.env.DB_USER,
                 password: process.env.DB_PASSWORD,
                 database: process.env.DB 
-            })  
+            })
         }
 
         query(sql, func){
@@ -54,12 +59,15 @@ var DBFactory = (function(){
     return {
         getInstance: function(){
             if(instance){
-                return instance
+                return instance;
             }
 
             instance = new singletonDB();
+            return instance;
         }
     }
 })()
 
-module.exports = DBFactory.getInstance()
+module.exports = {
+    db: DBFactory.getInstance()
+}
