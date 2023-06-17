@@ -6,22 +6,45 @@ var DBFactory = (function(){
 
         constructor(){
             this.pool = mysql.createPool({
-                connectionLimit: 100,
-                host: process.env.DB_HOST,
-                user: process.env.DB_USER,
+                connectionLimit: 30,
+                host    : process.env.DB_HOST,
+                user    : process.env.DB_USER,
                 password: process.env.DB_PASSWORD,
-                database: process.env.DB
+                database: process.env.DB 
             })  
         }
 
         query(sql, func){
-            this.pool.query(sql, (err, result) => {
-                if(err){
-                    func(err, result);
-                   return;
-                }
-                func(_, result);
+            if(!func || !sql){
+                throw new Error("DBFactory.query requires SQLcode and a function")
+            }
 
+            this.pool.getConnection((err, conn) => {
+               
+                // wrap function with conn.release
+                func = (func=> {
+                    return function (){
+                        conn.release();
+                        func.apply(this, arguments);
+                    }
+                })(func);
+                
+
+                if(err){
+                    func(err, null, conn);
+                    return;
+                }
+                
+                conn.query(sql, (err, result) => {
+                    if(err){
+                        func(err, null, conn);
+                        return;
+                    }
+
+                    func(err, result, conn);  
+                })
+
+                return;
             })
         }
     }
@@ -37,11 +60,6 @@ var DBFactory = (function(){
             instance = new singletonDB();
         }
     }
-})
+})()
 
-var datab = db.getInstance();
-var thing = new db();
-
-module.exports = {
-    DBFactory
-}
+module.exports = DBFactory.getInstance()
