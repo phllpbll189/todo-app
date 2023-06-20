@@ -3,7 +3,6 @@ const path = require('path');
 const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
 const {ConnectDB} = require('./middleware');
-const { apiRouter } = require('./Routes/ApiRouter');
 const { AccountRouter } = require('./Routes/AccountRouter');
 
 const app = express();
