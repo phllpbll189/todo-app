@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const mysql = require('mysql');
 const cookieParser = require('cookie-parser');
-const {ConnectDB} = require('./middleware');
 const { AccountRouter } = require('./Routes/AccountRouter');
 
 const app = express();
@@ -20,7 +19,6 @@ app.listen(port, (err) => {
 
 app.use(express.json())
 app.use(cookieParser())
-app.use(ConnectDB);
 
 //react webpage route
 let htmlPath  = path.resolve(__dirname+'/../front_end/build')
