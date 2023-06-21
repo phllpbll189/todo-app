@@ -12,9 +12,9 @@ ListRouter.delete('/permissions/:list', removeUserPermissions);
 ListRouter.put('/permissions/:list', changePermissions);
 
 ListRouter.get('/', GetList);
-ListRouter.post('/:name', PostList);
-ListRouter.delete('/:list', DeleteList);
-ListRouter.put('/:list', UpdateList);
+ListRouter.post('/', PostList);
+ListRouter.delete('/', DeleteList);
+ListRouter.put('/', UpdateList);
 
 module.exports = {
     ListRouter

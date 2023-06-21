@@ -16,6 +16,24 @@ function GetList(req, res){
     })
 }
 
+function PostList(req, res, next){
+    var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
+    console.log(req.query)
+    var sql = sqlCode.createList(token, req.query.name);
+    
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Something went wrong");
+            console.log(err)
+        }
+        else if(result){
+            console.log(result)
+            res.status(200).send("List Created");
+        }
+
+    })
+}
+
 function DeleteList(req, res){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.deleteList(token, req.query.list);
@@ -42,23 +60,6 @@ function UpdateList(req, res, next){
     db.query()
 }
 
-function PostList(req, res, next){
-    var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    console.log(req.query)
-    var sql = sqlCode.createList(token, req.query.name);
-    
-    db.query(sql, (err, result) => {
-        if(err){
-            res.status(500).send("Something went wrong");
-            console.log(err)
-        }
-        else if(result){
-            console.log(result)
-            res.status(200).send("List Created");
-        }
-
-    })
-}
 
 // TODO
 function addInvite(req, res, next){
