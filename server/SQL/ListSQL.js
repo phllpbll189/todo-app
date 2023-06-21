@@ -18,7 +18,7 @@ module.exports = {
         return `CALL DeleteList("${token}", "${listID}")`;
     },
     
-    updateList: () => {
+    updateList: (name, listID) => {
         return ""
     },
 
@@ -26,9 +26,10 @@ module.exports = {
         return `call deletePermissions(${ownerToken}, ${targetEmail}, ${listID})`;
     },
 
-    addUserPermissions: () => {
+    // move this to sql side
+    addUserPermissions: (token, new_email, listID, canWrite) => {
         return `INSERT INTO \`Invite_List\`(\`Users_Email\`, \`L_ListID\`, \`Write_Privilege\`, \`Owner\`)
-        SELECT \`${new_email}\`, ${listID}, ${canWrite}, ${isOwner} 
+        SELECT \`${new_email}\`, ${listID}, ${canWrite}, 0
         WHERE 0 < ( 
             SELECT COUNT(*)
             FROM Invite_List

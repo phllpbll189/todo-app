@@ -1,28 +1,6 @@
 const {parseToken} = require('../util');
 const sqlCode = require('../SQL/UserSQL');
-const { db } = require('../DB');
-   
-function VerifyUser(req, res, next) {
-
-    var cookies = {
-        header: req.cookies.header,
-        payload: req.cookies.payload,
-        token: req.cookies.token
-    }
-
-
-    db.getInstance().query(sqlCode.verifyUser(parseToken(cookies.header, cookies.payload, cookies.token)), (err, result) => {
-        if(err){
-            res.status(500).send("Internal Error");
-        }
-
-        if(!result[0]){
-            res.status(401).send("Bad Token");
-        }
-
-        next();
-    });
-}
+const { db } = require('./DB');
 
 function SignUp(req, res, next) {
     
@@ -61,43 +39,8 @@ function UpdateJWT(req, res, next) {
     });
 }
 
-function VerifyOwner(req, res, next) {
-    db.query(sqlCode.IsOwner(
-        req.cookies.payload.email, 
-        parseToken(req.cookies.header, req.cookies.payload, req.cookies.token),
-        req.params.list
-    ), (err, result) => {
-        if(err){
-            res.status(500).send("Internal Error");
-        }
-        if(result[0] != 1){
-            res.status(403).send("Forbidden");
-        }
-        next()
-    })
-}
-
-function VerifyAccess(req, res, next) {
-    db.query(sqlCode.HasAccess(
-            req.cookies.payload.email, 
-            parseToken(req.cookies.header, req.cookies.payload, req.cookies.token),
-            req.params.list
-        ), (err, result) => {
-
-        if(err){
-            res.status(500).send("Internal Error");
-        }
-        if(!result[0]){
-            res.status(403).send("Forbidden");
-        }
-        next()
-    })
-}
 module.exports = {
     UpdateJWT,
     SignUp,
     CheckCreds,
-    VerifyUser,
-    VerifyOwner,
-    VerifyAccess 
-};
+} 

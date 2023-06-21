@@ -1,6 +1,6 @@
 const sqlCode = require('../SQL/ListSQL');
 const {parseToken} = require('../util');
-const { db } = require('../DB');
+const { db } = require('./DB');
 
 function GetList(req, res){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
@@ -18,7 +18,7 @@ function GetList(req, res){
 
 function DeleteList(req, res){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.deleteList(token, req.body.listid);
+    var sql = sqlCode.deleteList(token, req.query.list);
 
     db.query(sql, (err, result) => {
         if(err){
@@ -34,16 +34,18 @@ function DeleteList(req, res){
     });
 }
 
+// TODO
 function UpdateList(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.updateList(token);
+    var sql = sqlCode.updateList(req.query.name, token);
     
     db.query()
 }
 
 function PostList(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.createList(token, req.body.name);
+    console.log(req.query)
+    var sql = sqlCode.createList(token, req.query.name);
     
     db.query(sql, (err, result) => {
         if(err){
@@ -58,13 +60,15 @@ function PostList(req, res, next){
     })
 }
 
+// TODO
 function addInvite(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token);
-
-    db.query()
+    var sql = sqlCode.addUserPermissions(token, req.body.email, req.query.list);
+    console.log(token, req.body.email, req.query.list)
+    //db.query()
 }
 
+// TODO
 function getPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.addUserPermissions(token);
@@ -72,6 +76,7 @@ function getPermissions(req, res, next){
     db.query()
 }
 
+// TODO
 function removeUserPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.addUserPermissions(token);
@@ -79,6 +84,7 @@ function removeUserPermissions(req, res, next){
     db.query()
 }
 
+// TODO
 function changePermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.addUserPermissions(token);

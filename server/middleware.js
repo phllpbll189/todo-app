@@ -29,33 +29,8 @@ function CreateJWT(req, res, next) {
     next();
 }
 
-function ConnectDB(req, res, next) {
-    let connection
-
-    try {
-        connection = mysql.createConnection({
-            host: process.env.DB_HOST,
-            user: process.env.DB_USER,
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB
-        });
-
-    } catch (error) {
-        res.status(501).redirect("/temp"); //make error handling function?
-        next(error);
-    };
-
-    req.VARS = {
-        ...req.VARS,
-        "connection": connection
-    };
-    
-    next();
-}
-
    
 module.exports = {
     AppendJWT,
     CreateJWT,
-    ConnectDB
 }

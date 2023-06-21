@@ -2,7 +2,7 @@ const express = require('express');
 const AccountRouter = express.Router();
 const {CheckCreds, UpdateJWT, SignUp} = require('../Controllers/UserController');
 const { AppendJWT, CreateJWT } = require('../middleware');
-const { ListRouter } = require('./ListRouter');
+const { ListRouter } = require('./AccountRoutes/ListRouter');
 
 //todo
 AccountRouter.post('/signup', CreateJWT, SignUp, AppendJWT, (req, res) => {
