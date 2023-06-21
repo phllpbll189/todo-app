@@ -64,8 +64,8 @@ function PostList(req, res, next){
 function addInvite(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.addUserPermissions(token, req.body.email, req.query.list);
-    console.log(token, req.body.email, req.query.list)
-    //db.query()
+
+    db.query()
 }
 
 // TODO
