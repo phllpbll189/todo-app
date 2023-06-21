@@ -1,19 +1,30 @@
 const express = require('express');
 const path = require('path');
-const {appendCookie} = require('./middleware');
+const mysql = require('mysql');
+const cookieParser = require('cookie-parser');
+const { AccountRouter } = require('./Routes/AccountRouter');
 
 const app = express();
-const PORT = 8000;
+let port;
 
-//login if not logged in
-//redirect to todo page and send profile data
-//they are logged in if they send a valid JWT
-
-app.listen(PORT, (err) => {
+if(process.env.NODE_ENV !== 'production'){
+    require('dotenv').config();
+    port = process.env.PORT || 8080;
+}
+ 
+app.listen(port, (err) => {
     if(err) console.log(err);
     console.log("App is running now");
 })
 
+app.use(express.json())
+app.use(cookieParser())
+
+//react webpage route
 let htmlPath  = path.resolve(__dirname+'/../front_end/build')
-app.use(appendCookie);
-app.use(express.static(htmlPath));
+app.use('/',  express.static(htmlPath));
+
+app.use('/accounts', AccountRouter);
+app.get('*', (req, res) => {
+    res.redirect('/');
+})
