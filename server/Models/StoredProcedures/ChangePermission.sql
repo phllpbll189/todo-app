@@ -2,7 +2,7 @@ use TodoSchema;
 DROP PROCEDURE IF EXISTS changePermissions;
 Delimiter //
 
-create procedure changePermissions(in TOKEN VARCHAR(255), in EMAIL VARCHAR(255), in LID int, in WRITEACCESS BOOL)
+create procedure changePermissions(in T VARCHAR(255), in EM VARCHAR(255), in LID int, in WR BOOL)
 begin
 	declare exit handler for sqlexception
 	begin
@@ -13,7 +13,7 @@ begin
     begin
     
 		update Invite_List
-        set Write_Privilege = WRITEACCESS
+        set Write_Privilege = WR
         where L_ListID = (
 			select L_ListID 
             from (
@@ -22,13 +22,13 @@ begin
 				where Users_email = (
 					select Email
 					from Users
-					where Token = TOKEN
+					where Token = T
 				)
 				and L_ListID = LID
 				and `Owner` = true
 			) tempthing
         )
-        and Users_Email = EMAIL;
+        and Users_Email = EM;
         
     end;
 	
