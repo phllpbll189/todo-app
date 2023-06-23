@@ -20,11 +20,14 @@ app.use(express.json())
 app.use(cookieParser())
 
 //react webpage route
-//let htmlPath  = path.resolve(__dirname+'/../front_end/build')
-//app.use('/',  express.static(htmlPath));
-app.use('/', express.static("helloWorld"))
+let htmlPath  = path.resolve(__dirname+'/../front_end/build')
+app.use('/',  express.static(htmlPath));
 
 app.use('/accounts', AccountRouter);
+app.use('/', (req, res) => {
+    res.send("React is not set up.");
+})
+
 app.get('*', (req, res) => {
     res.redirect('/');
 })
