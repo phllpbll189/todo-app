@@ -11,6 +11,7 @@ function GetList(req, res){
             console.log(err);
         }
         else if(result){
+            console.log(result);
             res.status(200).send(result);
         }
     })
@@ -18,7 +19,6 @@ function GetList(req, res){
 
 function PostList(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    console.log(req.query)
     var sql = sqlCode.createList(token, req.query.name);
     
     db.query(sql, (err, result) => {
@@ -43,11 +43,11 @@ function DeleteList(req, res){
             res.status(500).send("delete error");
             console.log(err);
         }
-        else if(result){
+        else if(result.affectedRows == 0){
             console.log(result);
-            res.status(200).send("delete success");
+            res.status(404).send("resource not deleted");
         } else{
-            res.status(207).send("Nothing to delete");
+            res.status(204);
         }
     });
 }
@@ -55,9 +55,20 @@ function DeleteList(req, res){
 // TODO
 function UpdateList(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.updateList(req.query.name, token);
+    var sql = sqlCode.updateList(req.query.lid, req.body.name, token);
     
-    db.query()
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Update Error");
+            console.log(err);
+        }
+        else if(result.affectedRows == 0){
+            console.log(result);
+            res.status(404).send("Resource Unchanged");
+        } else {
+            res.status(204);
+        }
+    })
 }
 
 

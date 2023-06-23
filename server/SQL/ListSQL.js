@@ -18,8 +18,8 @@ module.exports = {
         return `CALL DeleteList("${token}", "${listID}")`;
     },
     
-    updateList: (name, listID) => {
-        return ""
+    updateList: (token, name, listID) => {
+        return `call updateList("${token}", "${listID}", "${name}"`
     },
 
     removeUserPermissions: (ownerToken, targetEmail, listID) => {
@@ -28,27 +28,14 @@ module.exports = {
 
     // move this to sql side
     addUserPermissions: (token, new_email, listID, canWrite) => {
-        return `INSERT INTO \`Invite_List\`(\`Users_Email\`, \`L_ListID\`, \`Write_Privilege\`, \`Owner\`)
-        SELECT \`${new_email}\`, ${listID}, ${canWrite}, 0
-        WHERE 0 < ( 
-            SELECT COUNT(*)
-            FROM Invite_List
-            INNER JOIN Users on Users_Email = \`${Email}\`
-            AND \`L_ListID\` = ${listID}
-            AND \`Owner\` = ${owner_email}
-            AND Token = \`${token}\`)
-        AND 0 = (  
-            SELECT COUNT(*)
-            FROM Invite_List
-            WHERE Users_Email = \`${new_email}\`
-            AND \`L_ListID\` = ${listID})`
+        return `call changePermissions("${token}", "${new_email}", "${listID}", "${canWrite}")`;
     },
 
     changePermissions: (token, email, lid, access) => {
         return `call changePermissions(${token}, ${email}, ${lid}, ${access})`;
     },
 
-    getPermissions: () => {
-        return ""
+    getPermissions: (token, listID) => {
+        return `call getPermissions("${listID}", "${token}")`;
     },
 }

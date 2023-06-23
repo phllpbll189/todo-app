@@ -7,7 +7,7 @@ begin
     declare exit handler for sqlexception
     begin
         rollback;
-    end
+    end;
 
     start transaction;
     begin
@@ -25,7 +25,7 @@ begin
         );
 
         insert into Invite_List (Users_Email, L_ListID, Write_Privilege, `Owner`)
-        values newEmail, LID, canWrite, 0
+        select newEmail, LID, canWrite, 0
         where @hasAccess = true;
     end;
 end

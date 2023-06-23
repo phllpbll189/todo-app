@@ -22,7 +22,7 @@ BEGIN
 				)
 			);
             
-		select Users_Email
+		select Users_Email, Write_Privilege
         from Invite_List
         where L_ListID = LID
         and @tokenCheck > 0;
