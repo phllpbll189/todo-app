@@ -1,31 +1,31 @@
-use TodoSchema;
+USE TodoSchema;
 DROP PROCEDURE IF EXISTS addPermissions;
-Delimiter //
+DELIMITER //
 
-create procedure addPermissions(in T VARCHAR(255), in newEmail varchar(255), in LID varchar(255), in canWrite boolean)
-begin
-    declare exit handler for sqlexception
-    begin
-        rollback;
-    end;
+CREATE PROCEDURE addPermissions(in T VARCHAR(255), in newEmail varchar(255), in LID varchar(255), in canWrite boolean)
+BEGIN
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+        ROLLBACK;
+    END;
 
-    start transaction;
-    begin
-        set @email = (
-            select email
-            from Users
-            where token = T
+    START TRANSACTION;
+    BEGIN
+        SET @email = (
+            SELECT email
+            FROM Users
+            WHERE token = T
         );
 
-        set @hasAccess = (
-            select `Owner`
-            from Invite_List
-            where Users_Email = @email
-            and L_ListID = LID
+        SET @hasAccess = (
+            SELECT `Owner`
+            FROM Invite_List
+            WHERE Users_Email = @email
+            AND L_ListID = LID
         );
 
-        insert into Invite_List (Users_Email, L_ListID, Write_Privilege, `Owner`)
-        select newEmail, LID, canWrite, 0
-        where @hasAccess = true;
-    end;
-end
+        INSERT INTO Invite_List (Users_Email, L_ListID, Write_Privilege, `Owner`)
+        SELECT newEmail, LID, canWrite, 0
+        WHERE @hasAccess = true;
+    END;
+END

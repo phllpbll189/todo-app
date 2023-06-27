@@ -1,30 +1,30 @@
 USE TodoSchema;
 
-drop procedure if exists InsertList;
+DROP PROCEDURE IF EXISTS InsertList;
 
 DELIMITER //
 CREATE PROCEDURE InsertList(IN TOK VARCHAR(255), IN N VARCHAR(255))
 BEGIN
   
-	declare exit handler for sqlexception
-	begin
-		rollback;
-	end;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		ROLLBACK;
+	END;
   
-	start transaction;
-    begin
+	START TRANSACTION;
+    BEGIN
         
-		insert into Lists(`name`)
-		values(N);
+		INSERT INTO Lists(`name`)
+		VALUES(N);
         
 
-		insert into Invite_List(`Users_Email`, `L_ListID`, `Write_Privilege`, `Owner`)
-		select Email, LAST_INSERT_ID(), true, true
-        from Users
-        where Token = TOK;
+		INSERT INTO Invite_List(`Users_Email`, `L_ListID`, `Write_Privilege`, `Owner`)
+		SELECT Email, LAST_INSERT_ID(), true, true
+        FROM Users
+        WHERE Token = TOK;
 
-		commit;
-	end;
+		COMMIT;
+	END;
     
 END//
 

@@ -11,7 +11,7 @@ BEGIN
     
     START TRANSACTION;
     BEGIN
-		set @count = (
+		SET @count = (
 			SELECT L_ListID
 			FROM Invite_List
 			WHERE Users_Email = (
@@ -26,10 +26,12 @@ BEGIN
     
 		DELETE FROM Invite_List
         WHERE L_ListID = LID
-        and @count > 0;
+        AND @count > 0;
         
         DELETE FROM Lists
         WHERE ListID = LID;
+
+		COMMIT;
     END;
 END//
 

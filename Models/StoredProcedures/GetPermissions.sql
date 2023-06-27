@@ -1,30 +1,32 @@
-use TodoSchema;
-drop procedure if exists getPermissions;
-delimiter //
+USE TodoSchema;
+DROP PROCEDURE IF EXISTS getPermissions;
+DELIMITER //
 
-create procedure getPermissions(IN LID INT, IN TOK VARCHAR(255))
+CREATE PROCEDURE getPermissions(IN LID INT, IN TOK VARCHAR(255))
 BEGIN
-	DECLARE EXIT HANDLER FOR sqlexception
-    begin
-		rollback;
-	end;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+    BEGIN
+		ROLLBACK;
+	END;
     
-    start transaction;
-	begin		
-		set @tokenCheck = (
-			select count(*)
-			from Invite_List
-			Where L_ListID = LID
-			and Users_Email = (
-				select Email
-				from Users
-				where token = TOK
+    START TRANSACTION;
+	BEGIN		
+		SET @tokenCheck = (
+			SELECT count(*)
+			FROM Invite_List
+			WHERE L_ListID = LID
+			AND Users_Email = (
+				SELECT Email
+				FROM Users
+				WHERE token = TOK
 				)
 			);
             
-		select Users_Email, Write_Privilege
-        from Invite_List
-        where L_ListID = LID
-        and @tokenCheck > 0;
-    end;
+		SELECT Users_Email, Write_Privilege
+        FROM Invite_List
+        WHERE L_ListID = LID
+        AND @tokenCheck > 0;
+
+		COMMIT;
+    END;
 END//

@@ -1,35 +1,36 @@
-use TodoSchema;
+USE TodoSchema;
 DROP PROCEDURE IF EXISTS changePermissions;
-Delimiter //
+DELIMITER //
 
-create procedure changePermissions(in T VARCHAR(255), in EM VARCHAR(255), in LID int, in WR BOOL)
-begin
-	declare exit handler for sqlexception
-	begin
+CREATE PROCEDURE changePermissions(in T VARCHAR(255), in EM VARCHAR(255), in LID int, in WR BOOL)
+BEGIN
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
 		ROLLBACK;
-	end;
+	END;
 
-	start transaction;
-    begin
+	START TRANSACTION;
+    BEGIN
     
-		update Invite_List
-        set Write_Privilege = WR
-        where L_ListID = (
-			select L_ListID 
-            from (
-				select L_ListID
-				from Invite_List
-				where Users_email = (
-					select Email
-					from Users
-					where Token = T
+		UPDATE Invite_List
+        SET Write_Privilege = WR
+        WHERE L_ListID = (
+			SELECT L_ListID 
+            FROM (
+				SELECT L_ListID
+				FROM Invite_List
+				WHERE Users_email = (
+					SELECT Email
+					FROM Users
+					WHERE Token = T
 				)
-				and L_ListID = LID
-				and `Owner` = true
+				AND L_ListID = LID
+				AND `Owner` = true
 			) tempthing
         )
-        and Users_Email = EM;
-        
-    end;
+        AND Users_Email = EM;
+
+	   COMMIT; 
+    END;
 	
-end//
+END//
