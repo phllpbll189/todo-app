@@ -19,21 +19,21 @@ var DBFactory = (function(){
             })
         }
 
-        query(sql, func){
+        query(sql, cb){
             if(!func || !sql){
                 throw new Error("DBFactory.query requires SQLcode and a function")
             }
 
             this.pool.getConnection((err, conn) => {
                
-                // wrap function with conn.release
-                func = (func=> {
+                // wrap function with conn.release()
+                const wrappedCb = (cb => {
                     return function (){
                         conn.release();
-                        func.apply(this, arguments);
+                        cb.apply(this, arguments);
                     }
-                })(func);
-                
+                })(cb);
+                cb = wrappedCb;
 
                 if(err){
                     func(err, null, conn);
