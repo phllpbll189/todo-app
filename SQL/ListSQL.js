@@ -7,19 +7,19 @@ module.exports = {
             select Email
             from Users
             where Token = "${token}"
-        )`
+        )`;
     },
     
     createList: (token, list) => {
-        return `CALL InsertList("${token}", "${list}")`;
+        return `call InsertList("${token}", "${list}")`;
     },
 
     deleteList: (token, listID) => {
-        return `CALL DeleteList("${token}", "${listID}")`;
+        return `call DeleteList("${token}", "${listID}")`;
     },
     
     updateList: (token, name, listID) => {
-        return `call updateList("${token}", "${listID}", "${name}"`
+        return `call updateList("${token}", "${listID}", "${name}"`;
     },
 
     removeUserPermissions: (ownerToken, targetEmail, listID) => {
@@ -28,7 +28,7 @@ module.exports = {
 
     // move this to sql side
     addUserPermissions: (token, new_email, listID, canWrite) => {
-        return `call changePermissions("${token}", "${new_email}", "${listID}", "${canWrite}")`;
+        return `call addPermissions("${token}", "${new_email}", "${listID}", "${canWrite}")`;
     },
 
     changePermissions: (token, email, lid, access) => {
