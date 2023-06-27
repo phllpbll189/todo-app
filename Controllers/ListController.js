@@ -75,7 +75,7 @@ function UpdateList(req, res, next){
 // TODO
 function addInvite(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token, req.body.email, req.query.list);
+    var sql = sqlCode.addUserPermissions(token, req.body.email, req.params.list, req.body.canWrite);
 
     db.query()
 }
@@ -83,7 +83,7 @@ function addInvite(req, res, next){
 // TODO
 function getPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token);
+    var sql = sqlCode.getPermissions(req.params.list, token);
 
     db.query()
 }
@@ -91,7 +91,7 @@ function getPermissions(req, res, next){
 // TODO
 function removeUserPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token);
+    var sql = sqlCode.deletePermissions(token, req.body.email, req.params.list);
 
     db.query()
 }
@@ -99,7 +99,7 @@ function removeUserPermissions(req, res, next){
 // TODO
 function changePermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token);
+    var sql = sqlCode.changePermissions(token, req.body.email, req.params.list, req.body.canWrite);
 
     db.query()
 }
