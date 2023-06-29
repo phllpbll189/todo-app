@@ -77,14 +77,14 @@ function addInvite(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.addUserPermissions(token, req.body.email, req.params.list, req.body.canWrite);
     
-    db.query(sql, (err, res) => {
+    db.query(sql, (err, result) => {
         if(err){
             res.status(500).send("Insert Error");
-            console.error(err)
+            console.error(err);
         }
         else{
-            console.log(res);
-            res.status(204).send("added Resource")
+            console.log(result);
+            res.status(201).send("added Resource");
         }
     })
 }
@@ -94,7 +94,16 @@ function getPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.getPermissions(req.params.list, token);
 
-    db.query()
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Error Retrieving permissions");
+            console.error(err);
+        }
+        else{
+            console.log(result);
+            res.status(202).send(result);
+        }
+    })
 }
 
 // TODO
@@ -102,7 +111,18 @@ function removeUserPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.deletePermissions(token, req.body.email, req.params.list);
 
-    db.query()
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Delete Error");
+            console.error(err);
+        } else if(result.affectedRows == 0){
+            console.log(result);
+            res.status(404).send("resource not found");
+        } else {
+            console.log(result);
+            res.status(202).send("delete Successful");
+        }
+    })
 }
 
 // TODO
@@ -110,7 +130,18 @@ function changePermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.changePermissions(token, req.body.email, req.params.list, req.body.canWrite);
 
-    db.query()
+    db.query(sql, (err, res) => {
+        if(err){
+            console.error(err);
+            res.status(500).send("update error");
+        } else if(result.affectedRows == 0){
+            console.log(result);
+            res.status(404).send("resource not changed");
+        } else {
+            console.log(result);
+            res.status(202).send("change successful")
+        }
+    })
 }
 
 module.exports = {
