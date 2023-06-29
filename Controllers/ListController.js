@@ -76,8 +76,17 @@ function UpdateList(req, res, next){
 function addInvite(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
     var sql = sqlCode.addUserPermissions(token, req.body.email, req.params.list, req.body.canWrite);
-
-    db.query()
+    
+    db.query(sql, (err, res) => {
+        if(err){
+            res.status(500).send("Insert Error");
+            console.error(err)
+        }
+        else{
+            console.log(res);
+            res.status(204).send("added Resource")
+        }
+    })
 }
 
 // TODO

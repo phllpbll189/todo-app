@@ -20,7 +20,7 @@ var DBFactory = (function(){
         }
 
         query(sql, cb){
-            if(!func || !sql){
+            if(!cb || !sql){
                 throw new Error("DBFactory.query requires SQLcode and a function")
             }
 
@@ -36,17 +36,17 @@ var DBFactory = (function(){
                 cb = wrappedCb;
 
                 if(err){
-                    func(err, null, conn);
+                    cb(err, null, conn);
                     return;
                 }
                 
                 conn.query(sql, (err, result) => {
                     if(err){
-                        func(err, null, conn);
+                        cb(err, null, conn);
                         return;
                     }
 
-                    func(err, result, conn);  
+                    cb(err, result, conn);  
                 })
 
                 return;
