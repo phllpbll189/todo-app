@@ -23,7 +23,7 @@ app.use(cookieParser())
 let htmlPath  = path.resolve(__dirname+'/../front_end/build')
 app.use('/',  express.static(htmlPath));
 
-app.use('/accounts', AccountRouter);
+app.use('/account', AccountRouter);
 app.use('/', (req, res) => {
     res.send("React is not set up.");
 })

@@ -6,10 +6,10 @@ const ListRouter = express.Router();
 //ListRouter.use('/categories' CatagoryRouter);
 ListRouter.use('/todos', TodoRouter);
 
-ListRouter.post('/permissions/', addInvite);
-ListRouter.get('/permissions/', getPermissions);
-ListRouter.delete('/permissions/', removeUserPermissions);
-ListRouter.put('/permissions/', changePermissions);
+ListRouter.post('/permissions', addInvite);
+ListRouter.get('/permissions', getPermissions);
+ListRouter.delete('/permissions', removeUserPermissions);
+ListRouter.put('/permissions', changePermissions);
 
 ListRouter.get('/', GetList);
 ListRouter.post('/', PostList);

@@ -36,17 +36,12 @@ var DBFactory = (function(){
                 cb = wrappedCb;
 
                 if(err){
-                    cb(err, null, conn);
+                    cb(err, null);
                     return;
                 }
                 
                 conn.query(sql, (err, result) => {
-                    if(err){
-                        cb(err, null, conn);
-                        return;
-                    }
-
-                    cb(err, result, conn);  
+                    cb(err, result);  
                 })
 
                 return;

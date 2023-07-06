@@ -12,7 +12,7 @@ function GetList(req, res){
         }
         else if(result){
             console.log(result);
-            res.status(200).send(result);
+            res.status(200).send(result); //doesn't have OkPacket because it wasn't in stored procedure
         }
     })
 }
@@ -47,15 +47,15 @@ function DeleteList(req, res){
             console.log(result);
             res.status(404).send("resource not deleted");
         } else{
-            res.status(204);
+            console.log(result);
+            res.status(204).send();
         }
     });
 }
 
-// TODO
-function UpdateList(req, res, next){
+function UpdateList(req, res){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.updateList(req.query.lid, req.body.name, token);
+    var sql = sqlCode.updateList(token, req.body.lid, req.body.name);
     
     db.query(sql, (err, result) => {
         if(err){
@@ -63,24 +63,22 @@ function UpdateList(req, res, next){
             console.log(err);
         }
         else if(result.affectedRows == 0){
-            console.log(result);
+            console.log("item left unchanged");
             res.status(404).send("Resource Unchanged");
         } else {
-            res.status(204);
+            res.status(204).send();
         }
     })
 }
 
-
-// TODO
-function addInvite(req, res, next){
+function addInvite(req, res){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token, req.body.email, req.params.list, req.body.canWrite);
+    var sql = sqlCode.addUserPermissions(token, req.body.email, req.body.list, req.body.canWrite);
     
     db.query(sql, (err, result) => {
         if(err){
-            res.status(500).send("Insert Error");
             console.error(err);
+            res.status(500).send("Insert Error");
         }
         else{
             console.log(result);
@@ -92,16 +90,19 @@ function addInvite(req, res, next){
 // TODO
 function getPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.getPermissions(req.params.list, token);
+    var sql = sqlCode.getPermissions(req.body.list, token);
 
     db.query(sql, (err, result) => {
         if(err){
-            res.status(500).send("Error Retrieving permissions");
             console.error(err);
-        }
-        else{
+            res.status(500).send("Error Retrieving permissions");
+        } else if(result[0].length == 0){
+            console.warn("data not found for GET /permissions \n");
+            console.warn(result[1]);
+            res.status(404).send("could not find resource");
+        } else {
             console.log(result);
-            res.status(202).send(result);
+            res.status(202).send(result[0]);
         }
     })
 }
@@ -113,8 +114,8 @@ function removeUserPermissions(req, res, next){
 
     db.query(sql, (err, result) => {
         if(err){
-            res.status(500).send("Delete Error");
             console.error(err);
+            res.status(500).send("Delete Error");
         } else if(result.affectedRows == 0){
             console.log(result);
             res.status(404).send("resource not found");
