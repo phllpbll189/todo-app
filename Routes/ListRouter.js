@@ -1,13 +1,14 @@
 const express = require('express');
-const { TodoRouter } = require('./ListRoutes/TodoRouter');
-const { GetList, DeleteList, UpdateList, PostList, addInvite, getPermissions, removeUserPermissions, changePermissions} = require('../../Controllers/ListController');
+const { TodoRouter } = require('./TodoRouter');
+const {CatagoryRouter } = require('./CatagoryRouter');
+const { GetList, DeleteList, UpdateList, PostList, addInvite, getPermissions, removeUserPermissions, changePermissions} = require('../Controllers/ListController');
 const ListRouter = express.Router();
 
-//ListRouter.use('/categories' CatagoryRouter);
 ListRouter.use('/todos', TodoRouter);
+ListRouter.use('/catagory', CatagoryRouter);
 
 ListRouter.post('/permissions/', addInvite);
-ListRouter.get('/permissions/', getPermissions);
+ListRouter.get('/permissions/:lid', getPermissions);
 ListRouter.delete('/permissions/', removeUserPermissions);
 ListRouter.put('/permissions/', changePermissions);
 

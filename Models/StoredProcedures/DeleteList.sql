@@ -25,8 +25,7 @@ BEGIN
 
     
 		DELETE FROM Invite_List
-        WHERE L_ListID = LID
-        AND @count > 0;
+        WHERE L_ListID = LID;
         
         DELETE FROM Lists
         WHERE ListID = LID;

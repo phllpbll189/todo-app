@@ -20,33 +20,35 @@ var DBFactory = (function(){
         }
 
         query(sql, cb){
-            if(!func || !sql){
+            if(!cb || !sql){
                 throw new Error("DBFactory.query requires SQLcode and a function")
             }
 
             this.pool.getConnection((err, conn) => {
-               
+               if(err){
+                cb(err, null, conn);
+                return;
+               }
                 // wrap function with conn.release()
-                const wrappedCb = (cb => {
+                cb = (cb=> {
                     return function (){
-                        conn.release();
+                        arguments[2].release();
                         cb.apply(this, arguments);
                     }
                 })(cb);
-                cb = wrappedCb;
 
                 if(err){
-                    func(err, null, conn);
+                    cb(err, null, conn);
                     return;
                 }
                 
                 conn.query(sql, (err, result) => {
                     if(err){
-                        func(err, null, conn);
+                        cb(err, null, conn);
                         return;
                     }
-
-                    func(err, result, conn);  
+                    
+                    cb(err, result, conn);  
                 })
 
                 return;
@@ -54,7 +56,7 @@ var DBFactory = (function(){
         }
     }
 
-    var instance
+    let instance
 
     return {
         getInstance: function(){

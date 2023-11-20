@@ -2,6 +2,8 @@ const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const { AccountRouter } = require('./Routes/AccountRouter');
+const { ListRouter } = require('./Routes/ListRouter');
+const { ApiRouter } = require('./Routes/ApiRouter');
 
 const app = express();
 let port;
@@ -20,10 +22,10 @@ app.use(express.json())
 app.use(cookieParser())
 
 //react webpage route
-let htmlPath  = path.resolve(__dirname+'/../front_end/build')
-app.use('/',  express.static(htmlPath));
+app.use('/api', ApiRouter);
 
-app.use('/accounts', AccountRouter);
+// let htmlPath  = path.resolve(__dirname+'/../front_end/build')    ***CHANGE  TO PATCH OF BUILT WEBSITE WHEN DONE. WILL AUTOMATICALLY SEND WEBSITE 
+// app.use('/',  express.static(htmlPath));
 app.use('/', (req, res) => {
     res.send("React is not set up.");
 })
