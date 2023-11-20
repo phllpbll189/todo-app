@@ -6,10 +6,15 @@ function SignUp(req, res, next) {
     
     db.query(sqlCode.signUp(req.body.email, req.body.password, req.VARS.token), (err, result) => {
         if(err){
-            res.status(500).send("Internal Error");
+            if(err.errno == 1062){
+                res.status(409).send("Email already used");
+            } else{
+                res.status(500).send("Internal Error");
+            }
+            
+        } else {
+            next();
         }
-
-        if(err.errno == 1062) res.status(409).send("Email already used");
     });
 }
 
@@ -18,13 +23,14 @@ function CheckCreds(req, res, next){
     db.query(sqlCode.Check(req.body.email, req.body.password), (err, result) => {
         if(err){
             res.status(500).send("Internal Error");
+            next(err)
         }
 
-        if(!result[0]){ 
+        if(result != null && !result[0]){ 
             res.status(401).send("Invalid Username and Password");
+        } else {
+            next();
         }
-
-        next();
     });
 }
 

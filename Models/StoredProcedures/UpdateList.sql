@@ -1,24 +1,34 @@
 USE TodoSchema;
-DROP PROCEDURE IF EXISTS updateList;
+DROP PROCEDURE IF EXISTS UpdateList;
+
 DELIMITER //
-
-CREATE PROCEDURE updateList(in T varchar(255), in LID varchar(255), in N varchar(255))
+CREATE PROCEDURE UpdateList(in TOK varchar(255), in LID varchar(255), in NAM varchar(255))
 BEGIN
-    UPDATE Lists
-    SET `name` = N
-    WHERE ListID = LID
-    AND (
-		SELECT `Owner`
-        FROM Invite_List
-        WHERE Users_email = (
-			SELECT Email
-			FROM Users
-			WHERE Token = T
-        )
-        AND L_ListID = LID
-    ) = 1;
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION
+	BEGIN
+		ROLLBACK;
+	END;
 
-    COMMIT;
+	START TRANSACTION;
+    BEGIN
+        UPDATE Lists
+        SET `name` = NAM
+        WHERE ListID = (
+            SELECT L_ListID
+            FROM Invite_List
+            WHERE Users_Email = (
+                SELECT Email
+                FROM Users
+                WHERE Token = TOK
+            )
+            AND L_ListID = LID
+            AND `Owner` = true
+        );
+
+
+
+        COMMIT;
+    END;
 END//
 
 DELIMITER ;

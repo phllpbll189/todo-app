@@ -11,7 +11,6 @@ function GetList(req, res){
             console.log(err);
         }
         else if(result){
-            console.log(result);
             res.status(200).send(result);
         }
     })
@@ -42,66 +41,82 @@ function DeleteList(req, res){
         if(err){
             res.status(500).send("delete error");
             console.log(err);
-        }
-        else if(result.affectedRows == 0){
-            console.log(result);
-            res.status(404).send("resource not deleted");
-        } else{
-            res.status(204);
+        } else {
+            res.status(204).send();
         }
     });
 }
 
-// TODO
 function UpdateList(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.updateList(req.query.lid, req.body.name, token);
+    var sql = sqlCode.updateList(token, req.body.lid, req.body.name);
     
     db.query(sql, (err, result) => {
         if(err){
             res.status(500).send("Update Error");
             console.log(err);
-        }
-        else if(result.affectedRows == 0){
-            console.log(result);
-            res.status(404).send("Resource Unchanged");
         } else {
-            res.status(204);
+            res.status(204).send();
         }
     })
 }
 
 
-// TODO
+
 function addInvite(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.addUserPermissions(token, req.body.email, req.params.list, req.body.canWrite);
+    var sql = sqlCode.addUserPermissions(token, req.body.email, req.body.lid, req.body.canWrite);
 
-    db.query()
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Error Adding Invite");
+            console.log(err);
+        } else {
+            res.sendStatus(204);
+        }
+    })
 }
 
-// TODO
 function getPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.getPermissions(req.params.list, token);
-
-    db.query()
+    var sql = sqlCode.getPermissions(req.params.lid, token);
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Error Retrieving Data");
+            console.log(err);
+        } else {
+            res.status(200).send(result[0]);
+        }
+    })
 }
 
-// TODO
 function removeUserPermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.deletePermissions(token, req.body.email, req.params.list);
+    var sql = sqlCode.removeUserPermissions(token, req.body.email, req.body.lid);
 
-    db.query()
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Error in Deletion");
+            console.log(err);
+        } else {
+            res.sendStatus(204);
+        }
+    })
 }
 
 // TODO
 function changePermissions(req, res, next){
     var token = parseToken(req.cookies.header, req.cookies.payload, req.cookies.token);
-    var sql = sqlCode.changePermissions(token, req.body.email, req.params.list, req.body.canWrite);
+    var sql = sqlCode.changePermissions(token, req.body.email, req.body.lid, req.body.canWrite);
 
-    db.query()
+    db.query(sql, (err, result) => {
+        if(err){
+            res.status(500).send("Error in Update");
+            console.log(err);
+        } else {
+            res.sendStatus(204);
+        }
+    })
 }
 
 module.exports = {
