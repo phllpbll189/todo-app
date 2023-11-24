@@ -1,5 +1,6 @@
 const express = require('express');
 const TodoRouter = express.Router();
+const {GetTodos, InsertTodo} = require('../Controllers/TodoController');
 
 //AUTH MUST BE FINISHED FIRST  
 //it will be responsible for authorizing the cookie
@@ -10,9 +11,17 @@ const TodoRouter = express.Router();
 //or all todo's if an ID isn't present
 //or post todos
 //etc
-TodoRouter.get('/:id', (req, res) => {
-    res.send("hello from api/todo!")
-});
+TodoRouter.get('/:id/', GetTodos);
+
+TodoRouter.put('/:id', (req, res) => {
+    //TODO
+})
+
+TodoRouter.post('/:id', InsertTodo)
+
+TodoRouter.delete('/:id', (req, res) => {
+    //TODO
+})
 
 module.exports = {
     TodoRouter

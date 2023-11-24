@@ -11,7 +11,6 @@ AccountRouter.post('/signup', CreateJWT, SignUp, AppendJWT, (req, res) => {
 
 AccountRouter.post('/login', CheckCreds, CreateJWT, UpdateJWT, AppendJWT, (req, res) => {
     res.status(200).send("Authorized");
-    res.redirect('/');
 })
 
 module.exports = {
