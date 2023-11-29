@@ -1,6 +1,6 @@
 const express = require('express');
 const TodoRouter = express.Router();
-const {GetTodos, InsertTodo} = require('../Controllers/TodoController');
+const {GetTodos, InsertTodo, UpdateTodo, deleteTodo} = require('../Controllers/TodoController');
 
 //AUTH MUST BE FINISHED FIRST  
 //it will be responsible for authorizing the cookie
@@ -13,15 +13,11 @@ const {GetTodos, InsertTodo} = require('../Controllers/TodoController');
 //etc
 TodoRouter.get('/:id/', GetTodos);
 
-TodoRouter.put('/:id', (req, res) => {
-    //TODO
-})
+TodoRouter.put('/:id', UpdateTodo)
 
 TodoRouter.post('/:id', InsertTodo)
 
-TodoRouter.delete('/:id', (req, res) => {
-    //TODO
-})
+TodoRouter.delete('/:id', deleteTodo)
 
 module.exports = {
     TodoRouter

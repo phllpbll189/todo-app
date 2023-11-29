@@ -8,7 +8,7 @@ module.exports = {
        return `select *
         from todos
         where "${ListID}" = (
-            select L_ListID
+            select Invite_List.L_ListID
             from Invite_List
             where Users_Email  = (
                 select email 
@@ -17,4 +17,12 @@ module.exports = {
             )
         );`
     },
+
+    updateTodos: (Token, TodoID, ListID, Title, X, Y, Content, StartDate, EndDate) => {
+        return `call UpdateTodo("${Token}","${TodoID}","${ListID}","${Title}","${X}","${Y}",'${Content}', '${StartDate}', '${EndDate}')`;
+    },
+
+    deleteTodo: (Token, TodoID, ListID) => {
+        return `call deleteTodo("${Token}", "${ListID}", "${TodoID}")`;
+    }
 }
